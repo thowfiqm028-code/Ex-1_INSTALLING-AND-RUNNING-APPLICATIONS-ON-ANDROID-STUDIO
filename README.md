@@ -1,303 +1,100 @@
-# Ex-1_INSTALLING-AND-RUNNING-APPLICATIONS-ON-ANDROID-STUDIO
-
-# INSTALLING AND RUNNING APPLICATIONS ON ANDROID STUDIO
-
-**Name:** MOHAAMED THOWFIQ M
-**Register Number:** 212225040244  
-
-## 1. AIM
-
-To develop, install, and execute a simple Bus Ticket Booking Application using Android Studio with Java as the programming language and XML for designing the user interface.
-
-## 2. SOFTWARE REQUIREMENTS
-
-1. Android Studio IDE
-2. Java programming language
-3. XML for user interface design
-4. Android SDK
-5. Android Emulator or Android mobile device
-6. Windows operating system
-
-## 3. ALGORITHM
-
-1. Start the Android Studio application.
-2. Create a new project using the Empty Views Activity template.
-3. Set the project name as `TicketBookingApp` and select Java as the programming language.
-4. Design the application interface using `activity_main.xml`.
-5. Add input fields for passenger name and number of tickets.
-6. Add dropdown menus to select the starting city and destination.
-7. Add a Book Ticket button and a TextView to display the booking details.
-8. Open `MainActivity.java` and connect the XML components using `findViewById()`.
-9. Populate the dropdown menus with available cities.
-10. Validate the passenger name, ticket quantity, and selected cities.
-11. Calculate the total fare by multiplying the number of tickets by the fare per ticket.
-12. Display the booking confirmation with passenger details, journey information, ticket quantity, and total fare.
-13. Run the application on an Android Emulator.
-14. Verify the application by entering sample details and clicking the Book Ticket button.
-15. Stop the application.
-
-## 4. PROGRAM
-
-### A. XML Code – `activity_main.xml`
-
-```xml
-<?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#F2F6FC"
-    android:fillViewport="true">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="20dp">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="BUS TICKET BOOKING"
-            android:textColor="#173B70"
-            android:textSize="26sp"
-            android:textStyle="bold"
-            android:gravity="center"
-            android:padding="12dp" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Passenger Name"
-            android:textStyle="bold" />
-
-        <EditText
-            android:id="@+id/etName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Enter passenger name"
-            android:inputType="textPersonName" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="From"
-            android:textStyle="bold" />
-
-        <Spinner
-            android:id="@+id/spFrom"
-            android:layout_width="match_parent"
-            android:layout_height="50dp" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Destination"
-            android:textStyle="bold" />
-
-        <Spinner
-            android:id="@+id/spTo"
-            android:layout_width="match_parent"
-            android:layout_height="50dp" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Number of Tickets"
-            android:textStyle="bold" />
-
-        <EditText
-            android:id="@+id/etTickets"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Enter number of tickets"
-            android:inputType="number"
-            android:text="1" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Sample fare: Rs. 500 per ticket"
-            android:paddingTop="10dp" />
-
-        <Button
-            android:id="@+id/btnBook"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="BOOK TICKET"
-            android:layout_marginTop="20dp" />
-
-        <TextView
-            android:id="@+id/tvResult"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="17sp"
-            android:textColor="#173B70"
-            android:padding="16dp"
-            android:layout_marginTop="12dp" />
-
-    </LinearLayout>
-</ScrollView>
-```
-
-### B. Java Code – `MainActivity.java`
-
-```java
-// Keep the package declaration generated by Android Studio.
-
-import android.os.Bundle;
-import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Spinner;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import androidx.appcompat.app.AppCompatActivity;
-
-public class MainActivity extends AppCompatActivity {
-
-    EditText etName, etTickets;
-    Spinner spFrom, spTo;
-    Button btnBook;
-    TextView tvResult;
-
-    String[] cities = {
-        "Chennai", "Bangalore", "Coimbatore",
-        "Madurai", "Salem", "Trichy"
-    };
-
-    final int farePerTicket = 500;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        etName = findViewById(R.id.etName);
-        etTickets = findViewById(R.id.etTickets);
-        spFrom = findViewById(R.id.spFrom);
-        spTo = findViewById(R.id.spTo);
-        btnBook = findViewById(R.id.btnBook);
-        tvResult = findViewById(R.id.tvResult);
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(
-            this,
-            android.R.layout.simple_spinner_item,
-            cities
-        );
-
-        adapter.setDropDownViewResource(
-            android.R.layout.simple_spinner_dropdown_item
-        );
-
-        spFrom.setAdapter(adapter);
-        spTo.setAdapter(adapter);
-
-        btnBook.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                String name =
-                    etName.getText().toString().trim();
-
-                String ticketsText =
-                    etTickets.getText().toString().trim();
-
-                String from =
-                    spFrom.getSelectedItem().toString();
-
-                String to =
-                    spTo.getSelectedItem().toString();
-
-                if (name.isEmpty()) {
-                    etName.setError("Enter passenger name");
-                    return;
-                }
-
-                if (ticketsText.isEmpty()) {
-                    etTickets.setError("Enter number of tickets");
-                    return;
-                }
-
-                int tickets;
-
-                try {
-                    tickets = Integer.parseInt(ticketsText);
-                } catch (NumberFormatException e) {
-                    etTickets.setError("Enter a valid quantity");
-                    return;
-                }
-
-                if (tickets < 1 || tickets > 100) {
-                    etTickets.setError(
-                        "Enter between 1 and 100 tickets"
-                    );
-                    return;
-                }
-
-                if (from.equals(to)) {
-                    Toast.makeText(
-                        MainActivity.this,
-                        "Choose different cities",
-                        Toast.LENGTH_SHORT
-                    ).show();
-                    return;
-                }
-
-                int totalFare = tickets * farePerTicket;
-
-                String result =
-                    "BOOKING CONFIRMED!\n\n"
-                    + "Passenger: " + name + "\n"
-                    + "From: " + from + "\n"
-                    + "To: " + to + "\n"
-                    + "Tickets: " + tickets + "\n"
-                    + "Fare per ticket: Rs. " + farePerTicket + "\n"
-                    + "Total Fare: Rs. " + totalFare;
-
-                tvResult.setText(result);
-
-                Toast.makeText(
-                    MainActivity.this,
-                    "Ticket booked successfully!",
-                    Toast.LENGTH_SHORT
-                ).show();
-            }
-        });
-    }
-}
-```
-
-## 5. PROCEDURE
-
-1. Open Android Studio and create a new project named `TicketBookingApp`.
-2. Select Java as the programming language and configure the Android SDK.
-3. Open `activity_main.xml` and design the ticket booking interface.
-4. Open `MainActivity.java` and implement the booking functionality.
-5. Connect the XML components to Java using `findViewById()`.
-6. Add the available cities to the starting-point and destination dropdown menus.
-7. Implement validation for passenger details and ticket quantity.
-8. Calculate the total fare based on the number of tickets selected.
-9. Start an Android Emulator using Device Manager.
-10. Click the Run button to install and execute the application.
-11. Enter the passenger name, select the source and destination, enter the number of tickets, and click Book Ticket.
-12. Verify that the booking confirmation and total fare are displayed.
-
-
-## 6. OUTPUT :
-
-
-<img width="1917" height="1145" alt="image" src="https://github.com/user-attachments/assets/b7564896-297d-41ea-8566-6e118362abd6" />
-
-
-<img width="952" height="612" alt="image" src="https://github.com/user-attachments/assets/24ccd9f8-6af1-4050-bf4f-91f011635ca5" />
-
-
-
-
-## 7. RESULT
-
-Thus, the Bus Ticket Booking Application was developed using Android Studio, Java, and XML, and its execution was verified successfully on an Android Emulator.
+# EX-1: INSTALLING AND RUNNING APPLICATIONS ON ANDROID STUDIO
 
+**Name:** MOHAMED THOWFIQ M
+
+**Register Number:** 212225040244
+
+## Software Requirements
+
+- Android Studio
+- Android SDK
+- Android Virtual Device (AVD)
+- Java
+- XML
+
+---
+
+## Step 1 – System Requirements
+
+The required software tools are used to develop, design, and run Android applications. Android Studio provides the development environment, Java is used to implement the calculator's functionality, and XML is used to design the user interface.
+
+### Required Software
+
+- Android Studio
+- Java Development Kit (JDK)
+- Android SDK
+- Android Emulator
+
+---
+
+## Step 2 – Setup Android Studio
+
+Android Studio is the official Integrated Development Environment (IDE) used for Android application development.
+
+### Installation Procedure
+
+1. Download Android Studio from the official website.
+2. Run the installer and follow the installation instructions.
+3. Install the required Android SDK components.
+4. Configure the Android SDK location.
+5. Set up the Android Virtual Device if required.
+6. Launch Android Studio.
+7. Create a new Android project using the Empty Views Activity template.
+8. Select Java as the programming language.
+
+---
+
+## Creating the Calculator Application
+
+1. Open the project in Android Studio.
+2. Design the calculator interface using the `activity_main.xml` file.
+3. Add an EditText or TextView to display the input and calculation results.
+4. Add buttons for digits from 0 to 9.
+5. Add arithmetic operation buttons for addition (+), subtraction (−), multiplication (×), and division (÷).
+6. Add a Clear button to reset the input and a button to calculate the result (=).
+7. Open the `MainActivity.java` file.
+8. Initialize the required TextViews, EditTexts, and Buttons using `findViewById()`.
+9. Implement button click events using `setOnClickListener()`.
+10. Write the logic to perform arithmetic operations based on the selected operator.
+11. Display the calculated result on the calculator screen.
+12. Handle invalid inputs and division by zero appropriately.
+
+---
+
+## Step 3 – Create Android Virtual Device (AVD)
+
+An Android Virtual Device is used to test and run the application without requiring a physical Android phone.
+
+### Procedure
+
+1. Open Device Manager in Android Studio.
+2. Click **Create Virtual Device**.
+3. Select a suitable device configuration.
+4. Select and download an Android system image if required.
+5. Finish the configuration and start the emulator.
+6. Select the emulator from the device dropdown menu.
+
+---
+
+## Step 4 – Run the Application
+
+1. Open the Calculator project in Android Studio.
+2. Select the configured Android Emulator.
+3. Click the **Run ▶** button in Android Studio.
+4. Wait for the application to build and launch.
+5. Verify that the Calculator screen appears.
+6. Enter numerical values using the calculator buttons.
+7. Select an arithmetic operation and press the equals (=) button.
+8. Verify that the correct result is displayed.
+9. Test the Clear button and other arithmetic operations.
+
+---
+
+## Output
+
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/c58c8496-ffe5-4fb1-b2b0-6ca2579fc77d" />
+
+
+## Result
+
+Thus, a Calculator Android application was designed and implemented using Android Studio, Java, and XML. The application was successfully run on an Android Virtual Device, and its arithmetic operations were tested.
